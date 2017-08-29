@@ -42,7 +42,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Pool trigger Volume if actor in the volume
-	if (PressurePlate->IsOverlappingActor(ActorThatOpens))
+	if (!isDoorOpen && PressurePlate->IsOverlappingActor(ActorThatOpens))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Door is opening"));
 		OpenDoor();
