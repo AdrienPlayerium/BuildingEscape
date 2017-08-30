@@ -20,6 +20,10 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	Owner = GetOwner();
+	if (!PressurePlate)
+	{
+		UE_LOG(LogTemp, Error, TEXT("unassigned PressurePlate"));
+	}
 }
 
 void UOpenDoor::OpenDoor()
@@ -59,6 +63,11 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate()
 {
 	float TotalMass = 0.f;
 	TArray<AActor*> OverlappingActors;
+	if (!PressurePlate)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unassigned pressurePlate"));
+		return 0;
+	}
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 	for (const auto& Actor : OverlappingActors)
 	{
