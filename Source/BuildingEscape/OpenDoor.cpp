@@ -28,7 +28,8 @@ void UOpenDoor::BeginPlay()
 
 void UOpenDoor::OpenDoor()
 {
-	Owner->SetActorRotation(FRotator(0.0f, 0.0f , 0.0f));
+	OnRequestOpen.Broadcast();
+	//Owner->SetActorRotation(FRotator(0.0f, 0.0f , 0.0f));
 	isDoorOpen = true;
 }
 
