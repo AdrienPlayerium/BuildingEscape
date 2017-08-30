@@ -32,7 +32,8 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	/// Setup player viewpoint
+
 	FVector playerViewPointLocation;
 	FRotator playerViewPointRotation;
 
@@ -40,8 +41,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		OUT playerViewPointLocation ,
 		OUT playerViewPointRotation
 	);
-
-	//UE_LOG(LogTemp, Warning, TEXT("Location : %s, Rotation: %s"),*playerViewPointLocation.ToString(),*playerViewPointRotation.ToString());
 
 	FVector LineTraceEnd = playerViewPointLocation + playerViewPointRotation.Vector() * Reach;
 	DrawDebugLine(
@@ -54,5 +53,23 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		0.f,
 		10.f
 	);
+
+	/// Line-trace (ray-cast) out of reach distance
+	FHitResult Hit;
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT Hit,
+		playerViewPointLocation,
+		LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParameters
+	);
+
+	///See what we hit
+	AActor* ActorHit = Hit.GetActor();
+	if (ActorHit)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *(ActorHit->GetName()))
+	}
 }
 
