@@ -26,19 +26,6 @@ void UOpenDoor::BeginPlay()
 	}
 }
 
-void UOpenDoor::OpenDoor()
-{
-	OnRequestOpen.Broadcast();
-	//Owner->SetActorRotation(FRotator(0.0f, 0.0f , 0.0f));
-	isDoorOpen = true;
-}
-
-void UOpenDoor::CloseDoor()
-{
-	Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
-	isDoorOpen = false;
-}
-
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -47,16 +34,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	// Pool trigger Volume if actor in the volume
 	if (GetTotalMassOfActorsOnPlate() > TriggerMass)
 	{
-	//	UE_LOG(LogTemp, Warning, TEXT("Door is opening"));
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+		OnRequestOpen.Broadcast();
 	}
-
-	//GetTime
-	if (isDoorOpen && GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
+	else 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Door is closing"));
-		CloseDoor();
+		OnRequestClose.Broadcast();
 	}
 }
 
@@ -67,7 +49,7 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate()
 	if (!PressurePlate)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Unassigned pressurePlate"));
-		return 0;
+		return TotalMass;
 	}
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 	for (const auto& Actor : OverlappingActors)
