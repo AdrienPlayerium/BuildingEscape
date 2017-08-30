@@ -52,7 +52,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		false,
 		0.f,
 		0.f,
-		50.f
+		10.f
 	);
 }
 
