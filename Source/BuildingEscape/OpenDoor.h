@@ -28,15 +28,17 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	float OpenAngle = -90.0f;
-	
+	AActor* Owner = nullptr;
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate;
-	
-	AActor* ActorThatOpens;//which actor opens the door
 
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 1.0f;
-	
+	UPROPERTY(EditAnywhere)
+	float TriggerMass = 20.f;
+
 	float LastDoorOpenTime;
 	bool isDoorOpen = false;
+
+	float GetTotalMassOfActorsOnPlate();
 };
